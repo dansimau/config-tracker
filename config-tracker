@@ -42,14 +42,14 @@ reconfigure() {
 # Calls rsync to scan for changed files (but doesn't update the repo).
 #
 scan() {
-	rsync -av --dry-run --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+	rsync -av --dry-run --include-from="$include_file" --exclude-from="$exclude_file" --delete "$working_root/" "$repo/"
 }
 
 #
 # Syncs changed files to repo dir
 #
 sync() {
-	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" --delete "$working_root/" "$repo/"
 }
 
 #
