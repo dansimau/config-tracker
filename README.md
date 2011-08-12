@@ -21,13 +21,13 @@ Optionally configure the files that are being tracked:
 
 ### Install
 
-Run `init` to initialise and configure the repository, install crontab entry into `/etc/cron.d` and do an initial sync and commit of all the tracked files.
+Run `init` to initialise and configure the repository. This will also install a crontab entry into `/etc/cron.d/config-tracker` and do an initial sync and commit of all the files you are going to track.
 
 	/usr/local/config-tracker init
 
-And that's it! By default, an update will be run every 10 minutes from cron.
+And you're done. By default, an update will be run every 10 minutes from cron and a notification email will be sent with a summary of changes to any files.
 
-### Testing
+### Test it yourself
 
 Make some changes to some files and then manually run an `update` to sync and commit all the changed files:
 
@@ -62,8 +62,6 @@ You can change the notification email by modifying the file `contrib/post-commit
 And then run an `init` to reinstall the post-commit hook (this is not harmful):
 
 	/usr/local/config-tracker/config-tracker init
-
-Have fun!
 
 ## Requirements
 
