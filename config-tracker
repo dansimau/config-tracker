@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Include config file
+. "$0.conf"
+
+export GIT_DIR="$repo/.git"
+export GIT_WORK_TREE="$repo"
+
+#
+# Calls rsync to scan for changed files but doesn't update the repo.
+#
+scan() {
+	rsync -av --dry-run --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+}
+
+#
+# Calls rsync to sync the files into the config working dir.
+#
+update() {
+	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+}
+
+#
+# Commits config chanes in the working tree.
+#
+commit() {
+	git add -A && git commit -q -m "Auto-commit"
+}
+
+#
+# Pushes local config repo to remote/central repository.
+#
+#push() {
+#}
+
+if [ "$(type -t $1)" ]; then $1; else echo "Usage: $0 <action>. Where action is one of:" $(compgen -A function) && exit 1; fi
