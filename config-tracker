@@ -6,14 +6,36 @@
 export GIT_DIR="$repo/.git"
 export GIT_WORK_TREE="$repo"
 
+#
+# Runs first-time initialisation, such as creating the git repo, post-commit
+# hooks and crontab entries.
+#
 init() {
-	git init
-	# TODO: Install post-commit email here
-	# TODO: Install cron here
+
+	# Initialise git repo
+	git init -q
+
+	# Install latest version of post-commit email hook
+	cp "${0%/*}/contrib/post-commit" "$repo/.git/hooks/post-commit"
+	chmod +x "$repo/.git/hooks/post-commit"
+
+	# Install crontab entry if it doesn't already exist
+	[ ! -e "/etc/cron.d/config-tracker" ] && cp "${0%/*}/contrib/cron" "/etc/cron.d/config-tracker"
+
+	reconfigure
 }
 
 #
-# Calls rsync to scan for changed files but doesn't update the repo.
+# Reconfigures git options, such as notification email destination.
+#
+reconfigure() {
+
+	# Set the email address for notifications to go to
+	git config hooks.mailinglist "$notification_emails"
+}
+
+#
+# Calls rsync to scan for changed files (but doesn't update the repo).
 #
 scan() {
 	rsync -av --dry-run --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
