@@ -42,16 +42,12 @@ scan() {
 }
 
 #
-# Calls rsync to sync the files into the config working dir.
+# Calls rsync to sync the files into the config working dir and commits the
+# changes.
 #
 update() {
+	reconfigure
 	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
-}
-
-#
-# Commits config chanes in the working tree.
-#
-commit() {
 	git add -A && git commit -q -m "Auto-commit"
 }
 
