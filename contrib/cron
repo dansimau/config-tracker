@@ -1,0 +1,1 @@
+*/10 * * * * root /usr/local/config-tracker/config-tracker update

@@ -6,6 +6,12 @@
 export GIT_DIR="$repo/.git"
 export GIT_WORK_TREE="$repo"
 
+init() {
+	git init
+	# TODO: Install post-commit email here
+	# TODO: Install cron here
+}
+
 #
 # Calls rsync to scan for changed files but doesn't update the repo.
 #
