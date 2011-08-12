@@ -9,23 +9,61 @@ config-tracker is a way of keeping track of changes to server configuration file
 	cd /usr/local
 	git clone git://github.com/dansimau/config-tracker.git config-tracker
 
-### Configure and install
+### Configure
+
+Edit the configuration file to review the defaults and change the email address that notifications will be sent to:
+
+	vim /usr/local/config-tracker/config-tracker.conf
 
 Optionally configure the files that are being tracked:
 
 	vim /usr/local/config-tracker/include.conf
 
-Run `init` to initialise and configure the repository and install crontab entry into `/etc/cron.d`.
+### Install
+
+Run `init` to initialise and configure the repository, install crontab entry into `/etc/cron.d` and do an initial sync and commit of all the tracked files.
 
 	/usr/local/config-tracker init
 
-### Initial run
+And that's it! By default, an update will be run every 10 minutes from cron.
 
-Do an initial `update` which will sync and commit all the tracked files:
+### Testing
+
+Make some changes to some files and then manually run an `update` to sync and commit all the changed files:
 
 	/usr/local/config-tracker update
 
-And that's it! By default, an update will be run every 10 minutes from cron.
+You should receive an email with a summary of the changes:
+
+	To: dsimmons@squiz.co.uk
+	Subject: [config tracker] shared-php5 commit: d234d1e - etc/foo
+	Date: Fri, 12 Aug 2011 19:14:14 +0100 (BST)
+	From: root@shared-php5.squiz.co.uk (root)
+	
+	commit d234d1eff3587bfaee20f821f6c0653ef5db7ddf
+	Author: root <root@shared-php5.(none)>
+	Date:   Fri Aug 12 19:14:14 2011 +0100
+	
+		Auto-commit
+	
+	diff --git a/etc/foo b/etc/foo
+	index e69de29..3e20166 100644
+	--- a/etc/foo
+	+++ b/etc/foo
+	@@ -0,0 +1 @@
+	+# changed my config file yeah
+
+### Editing the email
+
+You can change the notification email by modifying the file `contrib/post-commit`:
+
+	vim /usr/local/config-tracker/contrib/post-commit
+
+And then run an `init` to reinstall the post-commit hook (this is not harmful):
+
+	/usr/local/config-tracker/config-tracker init
+
+Have fun!
 
 ## Requirements
 
