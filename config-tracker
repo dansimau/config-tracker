@@ -15,6 +15,10 @@ init() {
 	# Initialise git repo
 	git init -q
 
+	# Do an initial sync & commit
+	sync
+	commit
+
 	# Install latest version of post-commit email hook
 	cp "${0%/*}/contrib/post-commit" "$repo/.git/hooks/post-commit"
 	chmod +x "$repo/.git/hooks/post-commit"
@@ -42,12 +46,26 @@ scan() {
 }
 
 #
+# Syncs changed files to repo dir
+#
+sync() {
+	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+}
+
+#
 # Calls rsync to sync the files into the config working dir and commits the
 # changes.
 #
 update() {
 	reconfigure
-	rsync -a --include-from="$include_file" --exclude-from="$exclude_file" "$working_root/" "$repo/"
+	sync
+	commit
+}
+
+#
+# Commits changes in repo dir.
+#
+commit() {
 	git add -A && git commit -q -m "Auto-commit"
 }
 
