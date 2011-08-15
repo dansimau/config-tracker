@@ -7,6 +7,6 @@
 #
 
 mailto="$(git config hooks.mailinglist)"
-subject="[config tracker] $(hostname) commit: $(git rev-parse --short HEAD) - $(git show --pretty='format:' --name-only |tr -d '\n')"
+subject="$(git config hooks.emailprefix) $(hostname) commit: $(git rev-parse --short HEAD) - $(git show --pretty='format:' --name-only |tr -d '\n')"
 message="$(git log -1 -p)"
 echo "$message" |mail -s "$subject" "$mailto"

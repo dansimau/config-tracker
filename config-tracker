@@ -12,6 +12,9 @@ export GIT_WORK_TREE="$repo"
 #
 init() {
 
+	# Ensure repo dir exists
+	[ ! -e "$repo" ] && mkdir -p "$repo"
+
 	# Initialise git repo
 	git init -q
 
@@ -36,6 +39,9 @@ reconfigure() {
 
 	# Set the email address for notifications to go to
 	git config hooks.mailinglist "$notification_emails"
+
+	# Set the email subject prefix
+	git config hooks.emailprefix "$notification_emails_prefix"
 }
 
 #
