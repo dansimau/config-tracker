@@ -44,7 +44,7 @@ You should receive an email with a summary of the changes:
 	Author: root <root@shared-php5.(none)>
 	Date:   Fri Aug 12 19:14:14 2011 +0100
 	
-		Auto-commit
+	    M	etc/foo
 	
 	diff --git a/etc/foo b/etc/foo
 	index e69de29..3e20166 100644
