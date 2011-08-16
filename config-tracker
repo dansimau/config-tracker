@@ -75,7 +75,8 @@ update() {
 # Commits changes in repo dir.
 #
 commit() {
-	git add -A && git commit -q -m "Auto-commit" >/dev/null
+	message="$(git diff --name-status)"
+	git add -A && git commit -q -m "$message" >/dev/null
 }
 
 #
