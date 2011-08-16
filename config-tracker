@@ -38,10 +38,13 @@ init() {
 reconfigure() {
 
 	# Set the email address for notifications to go to
-	git config hooks.mailinglist "$notification_emails"
+	[ -z "$notification_emails" ] && git config hooks.mailinglist "$notification_emails"
 
 	# Set the email subject prefix
-	git config hooks.emailprefix "$notification_emails_prefix"
+	[ -z "$notification_emails_prefix" ] && git config hooks.emailprefix "$notification_emails_prefix"
+
+	# Set filter pattern option
+	[ -z "$notification_emails_filter" ] && git config git config hooks.emailfilefilter "$notification_emails_filter"
 }
 
 #

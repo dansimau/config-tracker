@@ -3,10 +3,51 @@
 # Post-commit email hook for git.
 #
 # dsimmons@squiz.co.uk
-# 2011-08-12
+# 2011-08-16
 #
 
-mailto="$(git config hooks.mailinglist)"
-subject="$(git config hooks.emailprefix) $(hostname) commit: $(git rev-parse --short HEAD) - $(git show --pretty='format:' --name-only |tr -d '\n')"
-message="$(git log -1 -p)"
-echo "$message" |mail -s "$subject" "$mailto"
+IFS=$'\n'
+
+
+files=$(git diff --name-only HEAD^1)
+
+#
+# Generates the email to send
+#
+generate_email() {
+
+	email_header_to="$(git config hooks.mailinglist)"
+	email_header_subject="$(git config hooks.emailprefix) $(hostname) commit: $(git rev-parse --short HEAD) - $files"
+	email_body="$(git log -1 -p)"
+
+	cat <<-EOF
+	To: $email_header_to
+	Subject: $email_header_subject
+	
+	$email_body
+	EOF
+}
+
+#
+# Checks if any of the committed files matched the file filter pattern
+#
+check_file_filter() {
+
+	filterpattern="$(git config hooks.emailfilefilter)"
+	[ -z "$filterpattern" ] && return 0
+
+	for file in $files; do
+
+		# Abort if file matches filter pattern
+		[[ "$file" =~ "$filterpattern" ]] && return 1
+
+	done
+
+	return 0
+}
+
+# Silently exit if a filename matched the filter pattern
+check_file_filter || exit
+
+# Send email
+generate_email | /usr/sbin/sendmail -t
