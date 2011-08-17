@@ -79,7 +79,13 @@ update() {
 #
 commit() {
 	git add -A
-	message="$(git diff --cached --name-status)"
+
+	# Generate log message of changed files
+	message="$(git diff --cached --name-status 2>/dev/null)"
+
+	# Use a generic message, eg. for first runs
+	[ -z "$message" ] && message="Auto-commit (diff could not be generated)."
+
 	git commit -q -m "$message" >/dev/null
 }
 
