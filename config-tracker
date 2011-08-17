@@ -75,8 +75,9 @@ update() {
 # Commits changes in repo dir.
 #
 commit() {
-	message="$(git diff --name-status)"
-	git add -A && git commit -q -m "$message" >/dev/null
+	git add -A
+	message="$(git diff --cached --name-status)"
+	git commit -q -m "$message" >/dev/null
 }
 
 #
