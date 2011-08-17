@@ -45,6 +45,9 @@ reconfigure() {
 
 	# Set filter pattern option
 	[ -n "$notification_emails_filter" ] && git config hooks.emailfilefilter "$notification_emails_filter"
+
+	# Set maximum lines of notification emails
+	[ -n "$notification_emails_maxlines" ] && git config hooks.emailmaxlines "$notification_emails_maxlines"
 }
 
 #

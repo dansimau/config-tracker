@@ -8,7 +8,6 @@
 
 IFS=$'\n'
 
-
 files=$(git diff --name-only HEAD^1)
 
 #
@@ -46,8 +45,32 @@ check_file_filter() {
 	return 0
 }
 
+#
+# Truncates the specified text to the number of lines in the git config
+#
+truncate_max() {
+
+	notification_emails_maxlines="$(git config hooks.emailmaxlines)"
+	if [ -z "$notification_emails_maxlines" ]; then
+		cat -
+	else
+
+		c=0
+		skipped=0
+		while IFS="" read -r line; do
+			c=$((c + 1))
+			[ ! $c -gt $notification_emails_maxlines ] && echo "$line" || skipped=$((skipped + 1))
+		done
+
+		if [ $skipped -gt 0 ]; then
+			echo ""
+			echo "[$skipped lines truncated. Run \`git show\` on the target repo for the full message again.]"
+		fi
+	fi
+}
+
 # Silently exit if a filename matched the filter pattern
 check_file_filter || exit
 
 # Send email
-generate_email | /usr/sbin/sendmail -t
+generate_email | truncate_max | /usr/sbin/sendmail -t
