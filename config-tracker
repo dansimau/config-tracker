@@ -48,6 +48,9 @@ reconfigure() {
 
 	# Set maximum lines of notification emails
 	[ -n "$notification_emails_maxlines" ] && git config hooks.emailmaxlines "$notification_emails_maxlines"
+
+	# Set config pattern for sensitive files
+	[ -n "$notification_emails_sensitive" ] && git config hooks.emailfilesensitive "$notification_emails_sensitive"
 }
 
 #

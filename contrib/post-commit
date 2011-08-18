@@ -10,6 +10,20 @@ IFS=$'\n'
 
 files=$(git diff --name-only HEAD^1)
 
+
+#
+# Checks if any of the committed files matched the file filter pattern
+#
+check_file_sensitive() {
+
+	filterpattern="$(git config hooks.emailfilesensitive)"
+	[ -z "$filterpattern" ] && return 0
+
+	for file in $files; do [[ "$file" =~ "$filterpattern" ]] && return 1; done
+
+	return 0
+}
+
 #
 # Generates the email to send
 #
@@ -17,7 +31,13 @@ generate_email() {
 
 	email_header_to="$(git config hooks.mailinglist)"
 	email_header_subject="$(git config hooks.emailprefix) $(hostname) commit: $(git rev-parse --short HEAD) - $files"
-	email_body="$(git log -1 -p)"
+
+	if check_file_sensitive; then
+		email_body="$(git log -1 -p)"
+	else
+		# Some files match the sensitive files pattern, so supress the diff
+		email_body="$(git log -1)"$'\n'$'\n'"[Diff suppressed, as some committed files may be sensitive.]"
+	fi
 
 	cat <<-EOF
 	To: $email_header_to
