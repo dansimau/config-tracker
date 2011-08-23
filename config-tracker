@@ -18,6 +18,9 @@ init() {
 	# Initialise git repo
 	git init -q
 
+	# Install crontab entry if it doesn't already exist
+	[ ! -e "/etc/cron.d/config-tracker" ] && cp "${0%/*}/contrib/cron" "/etc/cron.d/config-tracker"
+
 	# Do an initial sync & commit
 	sync
 	commit
@@ -25,10 +28,6 @@ init() {
 	# Install latest version of post-commit email hook
 	cp "${0%/*}/contrib/post-commit" "$repo/.git/hooks/post-commit"
 	chmod +x "$repo/.git/hooks/post-commit"
-
-	# Install crontab entry if it doesn't already exist
-	[ ! -e "/etc/cron.d/config-tracker" ] && cp "${0%/*}/contrib/cron" "/etc/cron.d/config-tracker"
-
 	reconfigure
 }
 
