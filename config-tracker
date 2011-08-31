@@ -80,7 +80,11 @@ update() {
 # Commits changes in repo dir.
 #
 commit() {
-	git add -A
+
+	# Same as `git add -A`, except that we want to maintain compatibility with
+	# older versions of git
+	git add .
+	git add -u
 
 	# Generate log message of changed files
 	message="$(git diff --cached --name-status 2>/dev/null)"
