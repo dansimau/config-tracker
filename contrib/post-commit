@@ -19,7 +19,7 @@ check_file_sensitive() {
 	filterpattern="$(git config hooks.emailfilesensitive)"
 	[ -z "$filterpattern" ] && return 0
 
-	for file in $files; do [[ "$file" =~ "$filterpattern" ]] && return 1; done
+	for file in $files; do [[ "$file" =~ $filterpattern ]] && return 1; done
 
 	return 0
 }
