@@ -6,6 +6,11 @@
 export GIT_DIR="$repo/.git"
 export GIT_WORK_TREE="$repo"
 
+# Set umask so that the git repo will only be accessible to the current user
+# (as we may be storing sensitive information). Newer versions of git support
+# `git init --shared=0xxx`, but we set umask to maintain compatibility.
+umask 0077
+
 #
 # Runs first-time initialisation, such as creating the git repo, post-commit
 # hooks and crontab entries.
@@ -19,7 +24,7 @@ init() {
 	git init -q
 
 	# Install crontab entry if it doesn't already exist
-	[ ! -e "/etc/cron.d/config-tracker" ] && cp "${0%/*}/contrib/cron" "/etc/cron.d/config-tracker"
+	[ ! -e "/etc/cron.d/config-tracker" ] && cp "${0%/*}/contrib/cron" "/etc/cron.d/config-tracker" && chmod 0644 /etc/cron.d/config-tracker
 
 	# Do an initial sync & commit
 	sync
