@@ -2,7 +2,7 @@
 repo="/var/lib/config"
 
 # Email address for notifications to go to
-notification_emails="dsimmons@squiz.co.uk"
+notification_emails="foo@example.com"
 
 # Email prefix to aid filtering
 notification_emails_prefix="[config tracker]"

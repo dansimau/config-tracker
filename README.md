@@ -11,8 +11,9 @@ config-tracker is a way of keeping track of changes to server configuration file
 
 ### Configure
 
-Edit the configuration file to review the defaults and change the email address that notifications will be sent to:
+Create and edit the configuration file to review the defaults and change the email address that notifications will be sent to:
 
+	cp /usr/local/config-tracker/config-tracker.conf.dist /usr/local/config-tracker/config-tracker.conf
 	vim /usr/local/config-tracker/config-tracker.conf
 
 Optionally configure the files that are being tracked:
