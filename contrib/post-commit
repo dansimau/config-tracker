@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Post-commit email hook for git.
 #
@@ -58,7 +58,7 @@ check_file_filter() {
 	for file in $files; do
 
 		# Abort if file matches filter pattern
-		[[ "$file" =~ "$filterpattern" ]] && return 1
+		[[ "$file" =~ $filterpattern ]] && return 1
 
 	done
 
