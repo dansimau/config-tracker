@@ -67,6 +67,6 @@ And then run an `init` to reinstall the post-commit hook (this is not harmful):
 ## Requirements
 
  * bash 3+
- * rsync
- * git
+ * rsync 3+
+ * git (tested with 1.5.4.3 and 1.7.3.4)
 
