@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Include config file
-. "$0.conf"
+[ -f /etc/config-tracker/config-tracker.conf ] && . /etc/config-tracker/config-tracker.conf
+[ -f /etc/config-tracker.conf ] && . /etc/config-tracker/config-tracker.conf
+[ -f "${0%/*}/config-tracker.conf"  ] && . "${0%/*}/config-tracker.conf"
 
 export GIT_DIR="$repo/.git"
 export GIT_WORK_TREE="$repo"
